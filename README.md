@@ -23,8 +23,8 @@ This spam mitigation tactic needs refining, and other measures are probably need
 
 ### Applying to a Job
 Each applicant must have a profile which has the following properties:
-- Name (can be pseudonym)
-- Links to relevant materials (e.g., LinkedIn profile)
+- name (can be pseudonym)
+- links to relevant materials (e.g., LinkedIn profile)
 
 Applying to a job involves adding this information to the applicants list in the job post construct.
 
