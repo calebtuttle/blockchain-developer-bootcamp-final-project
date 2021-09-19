@@ -26,14 +26,17 @@ contract JobBoard {
 
     /* Events */
 
-    event PostJob(uint indexed id, address poster, string title);
+    event PostJob(uint indexed jobId, address poster, string title);
+    event RemoveJob(uint indexed jobId, address poster, string title);
     event RegisterJobSeeker(address indexed seeker);
     event Apply(address applicant, uint jobId);
 
 
     /* Public functions */
 
-    constructor() public {}
+    constructor() public {
+        jobCount = 1;
+    }
 
     function postJob(string _title, string _description) public {
         jobPostings[jobCount] = JobPosting({
@@ -44,6 +47,19 @@ contract JobBoard {
         });
         jobCount += 1;
         emit PostJob(newJob.id, msg.sender, _title);
+    }
+
+    function removeJob(uint jobId) public {
+        require(jobPostings[jobId] == msg.sender);
+        string title = jobPostings.title;
+        jobPostings[jobId] = JobPosting({
+            id: 0,
+            poster: address(0),
+            title: "",
+            description: "",
+            applicants: []
+        });
+        emit RemoveJob(jobId, msg.sender, title);
     }
     
     function registerAsSeeker(string _linkedIn) {
