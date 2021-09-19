@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <0.7.0;
 
-contract SimpleStorage {
+contract JobBoard {
+
+    
     event StorageSet(string _message);
 
     uint256 public storedData;
