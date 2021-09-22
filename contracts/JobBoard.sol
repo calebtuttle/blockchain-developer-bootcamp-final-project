@@ -69,6 +69,12 @@ contract JobBoard {
         delete jobPostings[jobId];
         emit RemoveJob(jobId, msg.sender, title);
     }
+
+    /// @notice View the LinkedIn URLs of the applicants to a job
+    function viewApplicantLinkedIns(uint jobId) public view returns(address[] memory) {
+        require(jobPostings[jobId].poster != address(0));
+        return jobPostings[jobId].applicants;
+    }
     
     /// @notice Register as a job seeker
     /// @param _linkedIn The URL of the job seeker's LinkedIn
