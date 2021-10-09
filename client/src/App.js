@@ -3,10 +3,11 @@ import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import JobBoardContract from "./contracts/JobBoard.json";
 import getWeb3 from "./getWeb3";
 
+import JobPost from "./JobPost"
 import "./App.css";
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  state = { jobPostings: [], web3: null, accounts: null, contract: null };
 
   componentDidMount = async () => {
     // try {
@@ -63,7 +64,7 @@ class App extends Component {
   };
 
   runExample = async () => {
-    const { accounts, contract } = this.state;
+    const { jobPostings, accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.
     // await contract.methods.set(5).send({ from: accounts[0] });
@@ -75,30 +76,33 @@ class App extends Component {
     var desc = "Write solidity, write tests, etc....";
     await contract.methods.postJob(title, desc).send({ from: accounts[0] });
     let response = await contract.methods.getJob(1).call();
-    console.log(response['title']);
-    response = [response['poster'], response['title'], response['description']];
+    let posting = [response['poster'], response['title'], response['description']];
+    // jobPostings.push(posting);
+    let postings = jobPostings;
+    postings.push(posting);
 
     // Update state with the result.
-    this.setState({ storageValue: response });
+    this.setState({ jobPostings: postings });
   };
 
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
+
+    let poster = "{Address of job poster goes here...}";
+    let title = "{Job title goes here...}";
+    let description = "{Job description goes here...}";
+    if (this.state.jobPostings.length != 0) {
+        poster = this.state.jobPostings[0][0];
+        title = this.state.jobPostings[0][1];
+        description = this.state.jobPostings[0][2];
+    }
     return (
       <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        <p>
-          Try changing the value stored on <strong>line 42</strong> of App.js.
-        </p>
-        <div>The stored value is: {this.state.storageValue}</div>
+        <h1>A Decentralized Job Board</h1>
+        <JobPost poster={poster} title={title} description={description} />
+        {/* <div>The stored value is: {this.state.storageValue}</div> */}
       </div>
     );
   }
