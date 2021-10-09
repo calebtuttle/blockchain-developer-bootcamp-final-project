@@ -70,6 +70,22 @@ contract JobBoard {
         emit RemoveJob(jobId, msg.sender, title);
     }
 
+    /// @notice View the attributes of a job posting (except its applicants)
+    /// @param jobId The id of the job to view
+    function getJob(uint jobId) public view returns(
+        address poster,
+        string memory title,
+        string memory description
+        ) 
+    {
+        require(jobPostings[jobId].poster != address(0));
+        return (
+            jobPostings[jobId].poster, 
+            jobPostings[jobId].title, 
+            jobPostings[jobId].description
+        );
+    }
+
     /// @notice View the LinkedIn URLs of the applicants to a job
     function viewApplicantLinkedIns(uint jobId) public view returns(address[] memory) {
         require(jobPostings[jobId].poster != address(0));
