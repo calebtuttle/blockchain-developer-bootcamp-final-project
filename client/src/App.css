@@ -20,3 +20,8 @@
 .App-link {
   color: #09d3ac;
 }
+
+button {
+    min-height: 3vh;
+    min-width: 10vh;
+}

@@ -93,15 +93,34 @@ class App extends Component {
     let poster = "{Address of job poster goes here...}";
     let title = "{Job title goes here...}";
     let description = "{Job description goes here...}";
-    if (this.state.jobPostings.length != 0) {
+    if (this.state.jobPostings.length !== 0) {
         poster = this.state.jobPostings[0][0];
         title = this.state.jobPostings[0][1];
         description = this.state.jobPostings[0][2];
     }
+
+    const jobPosts = this.state.jobPostings.map((posting) => 
+        <JobPost poster={posting[0]} title={posting[1]} description={posting[2]} />
+    );
+
     return (
       <div className="App">
         <h1>A Decentralized Job Board</h1>
-        <JobPost poster={poster} title={title} description={description} />
+        <hr/>
+        <form>
+            {/* TODO: Add onclick functionality to the buttons */}
+            <label>
+                Job title: <input type="text" name="job-title" required />
+            </label>
+            <br/>
+            <label>
+                Job description: <input type="text" name="job-description" required />
+            </label>
+            <br/>
+            <input type="submit" value="Post job" />
+        </form>
+        <br/>
+        {jobPosts}
         {/* <div>The stored value is: {this.state.storageValue}</div> */}
       </div>
     );
