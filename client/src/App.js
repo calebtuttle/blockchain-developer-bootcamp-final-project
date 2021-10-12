@@ -52,9 +52,18 @@ class App extends Component {
         deployedNetwork && deployedNetwork.address,
       );
 
+      const jobCount = await instance.methods.jobCount().call();
+      let jobPostings = []
+      for (var jobId = 1; jobId < jobCount; jobId++) {
+        let job = await instance.methods.getJob(jobId).call();
+        jobPostings.push(job);
+      }
+
+
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
+    //   this.setState({ web3, accounts, contract: instance }, this.runExample);
+      this.setState({ jobPostings, web3, accounts, contract: instance });
     } catch (error) {
         alert(
           `Failed to load web3, accounts, or contract. Check console for details.`,
@@ -72,12 +81,19 @@ class App extends Component {
 
     let title = event.target.elements.jobTitle.value;
     let desc = event.target.elements.jobDescription.value;
+    let jobId = await contract.methods.jobCount().call();
     await contract.methods.postJob(title, desc).send({ from: accounts[0] });
 
-    let response = await contract.methods.getJob(jobPostings.length).call();
-    let posting = [response['poster'], response['title'], response['description']];
+    // let response = await contract.methods.getJob(jobPostings.length).call();
+    // let posting = [response['poster'], response['title'], response['description']];
+    let posting = [jobId, accounts[0], title, desc];
     let postings = jobPostings;
     postings.push(posting);
+    
+    // For testing...
+    console.log("We've reached postJob");
+    let jobCount = await contract.methods.jobCount().call();
+    console.log("jobCount: " + jobCount);
 
     this.setState({ jobPostings: postings });
   }
@@ -117,8 +133,8 @@ class App extends Component {
     //     description = this.state.jobPostings[0][2];
     // }
 
-    const jobPosts = this.state.jobPostings.map((posting) => 
-        <JobPost poster={posting[0]} title={posting[1]} description={posting[2]} />
+    let jobPosts = this.state.jobPostings.map((posting) => 
+        <JobPost key={posting[0]} poster={posting[1]} title={posting[2]} description={posting[3]} />
     );
 
     return (
@@ -137,6 +153,7 @@ class App extends Component {
             <input type="submit" value="Post job" />
         </form>
         <br/>
+        <JobPost poster="0x00000000000000000000000000000000000000000" title="Job title" description="Job description..." />
         {jobPosts}
         {/* <div>The stored value is: {this.state.storageValue}</div> */}
       </div>
