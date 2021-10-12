@@ -80,8 +80,8 @@ contract JobBoard {
     {
         require(jobPostings[jobId].poster != address(0));
         return (
-            jobPostings[jobId].poster, 
-            jobPostings[jobId].title, 
+            jobPostings[jobId].poster,
+            jobPostings[jobId].title,
             jobPostings[jobId].description
         );
     }

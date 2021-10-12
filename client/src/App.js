@@ -63,6 +63,25 @@ class App extends Component {
     }
   };
 
+  postJob = async (event) => {
+    event.preventDefault();
+    const { jobPostings, accounts, contract } = this.state;
+
+    // TODO: Why doesn't this work?
+    // Why does this function not post the job from the form input?
+
+    let title = event.target.elements.jobTitle.value;
+    let desc = event.target.elements.jobDescription.value;
+    await contract.methods.postJob(title, desc).send({ from: accounts[0] });
+
+    let response = await contract.methods.getJob(jobPostings.length).call();
+    let posting = [response['poster'], response['title'], response['description']];
+    let postings = jobPostings;
+    postings.push(posting);
+
+    this.setState({ jobPostings: postings });
+  }
+
   runExample = async () => {
     const { jobPostings, accounts, contract } = this.state;
 
@@ -77,7 +96,6 @@ class App extends Component {
     await contract.methods.postJob(title, desc).send({ from: accounts[0] });
     let response = await contract.methods.getJob(1).call();
     let posting = [response['poster'], response['title'], response['description']];
-    // jobPostings.push(posting);
     let postings = jobPostings;
     postings.push(posting);
 
@@ -90,14 +108,14 @@ class App extends Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
 
-    let poster = "{Address of job poster goes here...}";
-    let title = "{Job title goes here...}";
-    let description = "{Job description goes here...}";
-    if (this.state.jobPostings.length !== 0) {
-        poster = this.state.jobPostings[0][0];
-        title = this.state.jobPostings[0][1];
-        description = this.state.jobPostings[0][2];
-    }
+    // let poster = "{Address of job poster goes here...}";
+    // let title = "{Job title goes here...}";
+    // let description = "{Job description goes here...}";
+    // if (this.state.jobPostings.length !== 0) {
+    //     poster = this.state.jobPostings[0][0];
+    //     title = this.state.jobPostings[0][1];
+    //     description = this.state.jobPostings[0][2];
+    // }
 
     const jobPosts = this.state.jobPostings.map((posting) => 
         <JobPost poster={posting[0]} title={posting[1]} description={posting[2]} />
@@ -107,14 +125,13 @@ class App extends Component {
       <div className="App">
         <h1>A Decentralized Job Board</h1>
         <hr/>
-        <form>
-            {/* TODO: Add onclick functionality to the buttons */}
+        <form onSubmit={this.postJob}>
             <label>
-                Job title: <input type="text" name="job-title" required />
+                Job title: <input type="text" name="jobTitle" required />
             </label>
             <br/>
             <label>
-                Job description: <input type="text" name="job-description" required />
+                Job description: <input type="text" name="jobDescription" required />
             </label>
             <br/>
             <input type="submit" value="Post job" />
