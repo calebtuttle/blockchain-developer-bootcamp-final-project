@@ -56,6 +56,7 @@ class App extends Component {
       let jobPostings = []
       for (var jobId = 1; jobId < jobCount; jobId++) {
         let job = await instance.methods.getJob(jobId).call();
+        job = [jobId, job.poster, job.title, job.description];
         jobPostings.push(job);
       }
 
@@ -76,9 +77,6 @@ class App extends Component {
     event.preventDefault();
     const { jobPostings, accounts, contract } = this.state;
 
-    // TODO: Why doesn't this work?
-    // Why does this function not post the job from the form input?
-
     let title = event.target.elements.jobTitle.value;
     let desc = event.target.elements.jobDescription.value;
     let jobId = await contract.methods.jobCount().call();
@@ -89,11 +87,6 @@ class App extends Component {
     let posting = [jobId, accounts[0], title, desc];
     let postings = jobPostings;
     postings.push(posting);
-    
-    // For testing...
-    console.log("We've reached postJob");
-    let jobCount = await contract.methods.jobCount().call();
-    console.log("jobCount: " + jobCount);
 
     this.setState({ jobPostings: postings });
   }
@@ -124,15 +117,6 @@ class App extends Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
 
-    // let poster = "{Address of job poster goes here...}";
-    // let title = "{Job title goes here...}";
-    // let description = "{Job description goes here...}";
-    // if (this.state.jobPostings.length !== 0) {
-    //     poster = this.state.jobPostings[0][0];
-    //     title = this.state.jobPostings[0][1];
-    //     description = this.state.jobPostings[0][2];
-    // }
-
     let jobPosts = this.state.jobPostings.map((posting) => 
         <JobPost key={posting[0]} poster={posting[1]} title={posting[2]} description={posting[3]} />
     );
@@ -153,7 +137,7 @@ class App extends Component {
             <input type="submit" value="Post job" />
         </form>
         <br/>
-        <JobPost poster="0x00000000000000000000000000000000000000000" title="Job title" description="Job description..." />
+        <JobPost key="0" poster="0x00000000000000000000000000000000000000000" title="Test Job title" description="Test job description..." />
         {jobPosts}
         {/* <div>The stored value is: {this.state.storageValue}</div> */}
       </div>
