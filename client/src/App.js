@@ -3,7 +3,7 @@ import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import JobBoardContract from "./contracts/JobBoard.json";
 import getWeb3 from "./getWeb3";
 
-import JobPost from "./JobPost"
+import JobPost from "./JobPost";
 import "./App.css";
 
 class App extends Component {
