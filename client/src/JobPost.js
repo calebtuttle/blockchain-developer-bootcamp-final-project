@@ -7,21 +7,13 @@ export default class JobPost extends Component {
     applyToJob = async (event) => {
         // TODO: Write this
 
-        event.preventDefault();
-        const { jobPostings, accounts, contract } = this.state;
+        // event.preventDefault();
+        // const { jobPostings, accounts, contract } = this.state;
     
-        let title = event.target.elements.jobTitle.value;
-        let desc = event.target.elements.jobDescription.value;
-        let jobId = await contract.methods.jobCount().call();
-        await contract.methods.postJob(title, desc).send({ from: accounts[0] });
+        // await contract.methods.applyToJob(this.props.key).send({ from: accounts[0] });
+        // let linkedIn = event.target.elements.linkedIn.value;
     
-        // let response = await contract.methods.getJob(jobPostings.length).call();
-        // let posting = [response['poster'], response['title'], response['description']];
-        let posting = [jobId, accounts[0], title, desc];
-        let postings = jobPostings;
-        postings.push(posting);
-    
-        this.setState({ jobPostings: postings });
+        // this.setState({ jobPostings: postings });
       }
     
 
@@ -35,7 +27,6 @@ export default class JobPost extends Component {
 
     render() {
         return (
-
             <div>
                 <h4>{this.props.title}</h4>
                 <p>{this.props.description}</p>

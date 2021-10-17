@@ -95,7 +95,9 @@ contract JobBoard {
     /// @notice Register as a job seeker
     /// @param _linkedIn The URL of the job seeker's LinkedIn
     function registerAsSeeker(string memory _linkedIn) public {
-        require(keccak256(bytes(_linkedIn)) != keccak256(bytes("")));
+        require(keccak256(bytes(_linkedIn)) != keccak256(bytes("")), 
+                "This account has already registered."
+        );
         jobSeekers[msg.sender] = JobSeeker({
             linkedIn: _linkedIn
         });
@@ -109,12 +111,15 @@ contract JobBoard {
         require(keccak256(bytes(jobSeekers[msg.sender].linkedIn)) != keccak256(bytes("")));
 
         // TODO: is there a better way to do this?
-        JobPosting storage posting = jobPostings[jobId];
-        for (uint i = 0; i < posting.applicants.length; i++) {
-            assert(posting.applicants[i] != msg.sender);
-        }
+        // JobPosting storage posting = jobPostings[jobId];
+        // for (uint i = 0; i < posting.applicants.length; i++) {
+        //     assert(posting.applicants[i] != msg.sender);
+        // }
 
         jobPostings[jobId].applicants.push(msg.sender);
+        jobSeekers[msg.sender] = JobSeeker({
+            linkedIn: _linkedIn
+        });
         emit Apply(msg.sender, jobId);
     }
 
