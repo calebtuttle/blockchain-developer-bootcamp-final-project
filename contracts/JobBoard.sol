@@ -32,7 +32,6 @@ contract JobBoard {
     /// @dev Maps job seeker address to job seeker LinkedIn
     mapping(address => string) public jobSeekers;
 
-    string[] public
     /// @notice Log that a job has been posted
     event PostJob(uint indexed jobId, address poster, string title);
 
