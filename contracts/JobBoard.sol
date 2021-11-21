@@ -14,10 +14,10 @@ contract JobBoard {
         address[] applicants;
     }
 
-    struct JobSeeker {
-        string linkedIn;
-        // TODO: add more??
-    }
+    // struct JobSeeker {
+    //     string linkedIn;
+    //     // TODO: add more??
+    // }
 
     /// @notice The number of jobs that have been posted
     /// @dev Used to determine the id of a new JobPosting
@@ -27,9 +27,12 @@ contract JobBoard {
     mapping(uint => JobPosting) public jobPostings;
 
     /// @dev Maps job seeker address to JobSeeker
-    mapping(address => JobSeeker) public jobSeekers;
+    // mapping(address => JobSeeker) public jobSeekers;
+    
+    /// @dev Maps job seeker address to job seeker LinkedIn
+    mapping(address => string) public jobSeekers;
 
-
+    string[] public
     /// @notice Log that a job has been posted
     event PostJob(uint indexed jobId, address poster, string title);
 
@@ -87,28 +90,21 @@ contract JobBoard {
     }
 
     /// @notice View the LinkedIn URLs of the applicants to a job
-    function viewApplicantLinkedIns(uint jobId) public view returns(address[] memory) {
+    function viewApplicantLinkedIns(uint jobId) public view returns(string[] memory) {
         require(jobPostings[jobId].poster != address(0));
-        return jobPostings[jobId].applicants;
-    }
-    
-    /// @notice Register as a job seeker
-    /// @param _linkedIn The URL of the job seeker's LinkedIn
-    function registerAsSeeker(string memory _linkedIn) public {
-        require(keccak256(bytes(_linkedIn)) != keccak256(bytes("")), 
-                "This account has already registered."
-        );
-        jobSeekers[msg.sender] = JobSeeker({
-            linkedIn: _linkedIn
-        });
-        emit RegisterJobSeeker(msg.sender);
+        address[] storage applicants = jobPostings[jobId].applicants;
+        uint len = applicants.length;
+        string[] storage linkedIns = new string(len);
+        for (uint i = 0; i < jobPostings[jobId].applicants.length; i++) {
+            linkedIns.push(jobSeekers[jobPostings[jobId].applicants[i]]);
+        }
+        return linkedIns;
     }
 
     /// @notice Apply to a job
     /// @param jobId The job id of the job to apply to
-    function applyToJob(uint jobId) public {
+    function applyToJob(uint jobId, string memory _linkedIn) public {
         require(jobPostings[jobId].poster != address(0));
-        require(keccak256(bytes(jobSeekers[msg.sender].linkedIn)) != keccak256(bytes("")));
 
         // TODO: is there a better way to do this?
         // JobPosting storage posting = jobPostings[jobId];
@@ -117,9 +113,10 @@ contract JobBoard {
         // }
 
         jobPostings[jobId].applicants.push(msg.sender);
-        jobSeekers[msg.sender] = JobSeeker({
-            linkedIn: _linkedIn
-        });
+        // jobSeekers[msg.sender] = JobSeeker({
+        //     linkedIn: _linkedIn
+        // });
+        jobSeekers[msg.sender] = _linkedIn;
         emit Apply(msg.sender, jobId);
     }
 

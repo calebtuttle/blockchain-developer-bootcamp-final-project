@@ -63,6 +63,8 @@ class App extends Component {
     postings.push(posting);
 
     this.setState({ jobPostings: postings });
+
+    console.log("Posted new job with jobId " + posting[0])
   }
 
   runExample = async () => {
@@ -92,14 +94,13 @@ class App extends Component {
     }
 
     let jobPosts = this.state.jobPostings.map((posting) => 
-        <JobPost key={posting[0]} poster={posting[1]} title={posting[2]} description={posting[3]} />
+        <JobPost key={posting[0]} web3={this.state.web3} accounts={this.state.accounts} contract={this.state.contract} 
+            jobId={posting[0]} poster={posting[1]} title={posting[2]} description={posting[3]} />
     );
 
     return (
       <div className="App">
         <h1>A Decentralized Job Board</h1>
-        <hr/>
-        <ApplicantRegistration web3={this.state.web3} accounts={this.state.accounts} contract={this.state.contract}/>
         <hr/>
         <form onSubmit={this.postJob}>
             <label>
@@ -113,7 +114,8 @@ class App extends Component {
             <input type="submit" value="Post job" />
         </form>
         <br/>
-        <JobPost key="0" poster="0x00000000000000000000000000000000000000000" title="Test Job title" description="Test job description..." />
+        {/* <JobPost key="0" web3={this.state.web3} accounts={this.state.accounts} contract={this.state.contract} 
+            jobId="0" poster="0x00000000000000000000000000000000000000000" title="Test Job title" description="Test job description..." /> */}
         {jobPosts}
         {/* <div>The stored value is: {this.state.storageValue}</div> */}
       </div>
