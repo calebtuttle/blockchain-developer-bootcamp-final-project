@@ -14,10 +14,10 @@ contract JobBoard {
         address[] applicants;
     }
 
-    // struct JobSeeker {
-    //     string linkedIn;
-    //     // TODO: add more??
-    // }
+    struct JobSeeker {
+        string linkedIn;
+        // TODO: add more??
+    }
 
     /// @notice The number of jobs that have been posted
     /// @dev Used to determine the id of a new JobPosting
@@ -27,10 +27,8 @@ contract JobBoard {
     mapping(uint => JobPosting) public jobPostings;
 
     /// @dev Maps job seeker address to JobSeeker
-    // mapping(address => JobSeeker) public jobSeekers;
-    
-    /// @dev Maps job seeker address to job seeker LinkedIn
-    mapping(address => string) public jobSeekers;
+    mapping(address => JobSeeker) public jobSeekers;
+
 
     /// @notice Log that a job has been posted
     event PostJob(uint indexed jobId, address poster, string title);
@@ -88,16 +86,10 @@ contract JobBoard {
         );
     }
 
-    /// @notice View the LinkedIn URLs of the applicants to a job
-    function viewApplicantLinkedIns(uint jobId) public view returns(string[] memory) {
+    /// @notice View the eth addresses of the applicants to a job
+    function viewApplicantAddresses(uint jobId) public view returns(address[] memory) {
         require(jobPostings[jobId].poster != address(0));
-        address[] storage applicants = jobPostings[jobId].applicants;
-        uint len = applicants.length;
-        string[] storage linkedIns = new string(len);
-        for (uint i = 0; i < jobPostings[jobId].applicants.length; i++) {
-            linkedIns.push(jobSeekers[jobPostings[jobId].applicants[i]]);
-        }
-        return linkedIns;
+        return jobPostings[jobId].applicants;
     }
 
     /// @notice Apply to a job
@@ -112,10 +104,9 @@ contract JobBoard {
         // }
 
         jobPostings[jobId].applicants.push(msg.sender);
-        // jobSeekers[msg.sender] = JobSeeker({
-        //     linkedIn: _linkedIn
-        // });
-        jobSeekers[msg.sender] = _linkedIn;
+        jobSeekers[msg.sender] = JobSeeker({
+            linkedIn: _linkedIn
+        });
         emit Apply(msg.sender, jobId);
     }
 

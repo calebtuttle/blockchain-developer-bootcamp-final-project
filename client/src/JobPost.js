@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import "./JobPost.css";
 
 export default class JobPost extends Component {
-    state = { linkedIns: [] };
+    state = { applicantAddrs: [] };
 
     applyToJob = async (event) => {
         event.preventDefault();
@@ -44,17 +44,17 @@ export default class JobPost extends Component {
     //     }
     // }
 
-    viewApplicantLinkedIns = async (linkedInItems) => {
+    viewApplicantapplicantAddrs = async (linkedInItems) => {
         // event.preventDefault();
         try {
             console.log("Viewing applicants to job with jobId " + this.props.jobId);
             const contract = this.props.contract;
             const accounts = this.props.accounts;
-            let linkedIns = await contract.methods.viewApplicantLinkedIns(parseInt(this.props.jobId)).call({ from: accounts[0] });
+            let applicantAddrs = await contract.methods.viewApplicantAddresses(parseInt(this.props.jobId)).call({ from: accounts[0] });
             
-            console.log(linkedIns);
+            console.log(applicantAddrs);
             
-            this.setState({ linkedIns })
+            this.setState({ applicantAddrs })
         } catch (error) {
             alert("Error");
             console.error(error);
@@ -63,7 +63,7 @@ export default class JobPost extends Component {
 
     render() {
 
-        let linkedInItems = this.state.linkedIns.map((linkedIn, index) => 
+        let linkedInItems = this.state.applicantAddrs.map((linkedIn, index) => 
             <li key={index} className="linkedInItem">{linkedIn}</li>
         );
 
@@ -87,7 +87,7 @@ export default class JobPost extends Component {
                 </div>
 
                 {/* <button onClick={this.removeJob} className="remove-job-button" >Remove Job</button> */}
-                <button onClick={() => this.viewApplicantLinkedIns(linkedInItems)} className="view-linkedins-button" >View LinkedIn URLs of Applicants</button>
+                <button onClick={() => this.viewApplicantapplicantAddrs(linkedInItems)} className="view-applicantAddrs-button" >View Applicants' Addresses</button>
                 {linkedInItems}
             </div>
         );
