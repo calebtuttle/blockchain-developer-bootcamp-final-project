@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: MIT
-// pragma solidity >=0.4.21 <0.7.0;
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -79,8 +78,7 @@ contract JobBoard is Ownable {
     /// @notice Remove all jobs from the job board
     function removeAllJobs() public onlyOwner {
         for (uint i = 0; i < jobCount; i++) {
-            if (jobPostings[i].poster != address(0))
-            {
+            if (jobPostings[i].poster != address(0)) {
                 delete jobPostings[i];
             }
         }
@@ -114,12 +112,6 @@ contract JobBoard is Ownable {
     /// @param jobId The job id of the job to apply to
     function applyToJob(uint jobId, string memory _linkedIn) public {
         require(jobPostings[jobId].poster != address(0));
-
-        // TODO: is there a better way to do this?
-        // JobPosting storage posting = jobPostings[jobId];
-        // for (uint i = 0; i < posting.applicants.length; i++) {
-        //     assert(posting.applicants[i] != msg.sender);
-        // }
 
         jobPostings[jobId].applicants.push(msg.sender);
         jobSeekers[msg.sender] = JobSeeker({
