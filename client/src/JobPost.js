@@ -44,7 +44,7 @@ export default class JobPost extends Component {
     //     }
     // }
 
-    viewApplicantapplicantAddrs = async (linkedInItems) => {
+    viewApplicantapplicantAddrs = async () => {
         // event.preventDefault();
         try {
             console.log("Viewing applicants to job with jobId " + this.props.jobId);
@@ -63,8 +63,8 @@ export default class JobPost extends Component {
 
     render() {
 
-        let linkedInItems = this.state.applicantAddrs.map((linkedIn, index) => 
-            <li key={index} className="linkedInItem">{linkedIn}</li>
+        let applicantAddrItems = this.state.applicantAddrs.map((applicantAddr, index) => 
+            <li key={index} className="applicantAddrItem">{applicantAddr}</li>
         );
 
         return (
@@ -87,8 +87,8 @@ export default class JobPost extends Component {
                 </div>
 
                 {/* <button onClick={this.removeJob} className="remove-job-button" >Remove Job</button> */}
-                <button onClick={() => this.viewApplicantapplicantAddrs(linkedInItems)} className="view-applicantAddrs-button" >View Applicants' Addresses</button>
-                {linkedInItems}
+                <button onClick={this.viewApplicantapplicantAddrs} className="view-applicantAddrs-button" >View Applicants' Addresses</button>
+                {applicantAddrItems}
             </div>
         );
     }

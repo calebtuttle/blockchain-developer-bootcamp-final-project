@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.21 <0.7.0;
+// pragma solidity >=0.4.21 <0.7.0;
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title Another Job Board
 /// @author Caleb Tuttle
 /// @notice Post jobs and apply to jobs on the job board.
-contract JobBoard {
+contract JobBoard is Ownable {
 
     struct JobPosting {
         uint id;
@@ -36,6 +39,9 @@ contract JobBoard {
     /// @notice Log that a job has been removed
     event RemoveJob(uint indexed jobId, address poster, string title);
 
+    /// @notice Log that all jobs have been removed
+    event RemoveAllJobs();
+
     /// @notice Log that a job seeker has registered
     event RegisterJobSeeker(address indexed seeker);
 
@@ -43,7 +49,7 @@ contract JobBoard {
     event Apply(address applicant, uint jobId);
 
 
-    constructor() public {
+    constructor() {
         jobCount = 1;
     }
 
@@ -68,6 +74,18 @@ contract JobBoard {
         string memory title = jobPostings[jobId].title;
         delete jobPostings[jobId];
         emit RemoveJob(jobId, msg.sender, title);
+    }
+
+    /// @notice Remove all jobs from the job board
+    function removeAllJobs() public onlyOwner {
+        for (uint i = 0; i < jobCount; i++) {
+            if (jobPostings[i].poster != address(0))
+            {
+                delete jobPostings[i];
+            }
+        }
+        jobCount = 1;
+        emit RemoveAllJobs();
     }
 
     /// @notice View the attributes of a job posting (except its applicants)
