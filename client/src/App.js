@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import JobBoardContract from "./contracts/JobBoard.json";
 import getWeb3 from "./getWeb3";
 
 import JobPost from "./JobPost";
-import ApplicantRegistration from "./ApplicantRegistration";
 import "./App.css";
 
 class App extends Component {
@@ -34,10 +32,6 @@ class App extends Component {
         jobPostings.push(job);
       }
 
-
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-    //   this.setState({ web3, accounts, contract: instance }, this.runExample);
       this.setState({ jobPostings, web3, accounts, contract: instance });
     } catch (error) {
         alert(
@@ -56,8 +50,6 @@ class App extends Component {
     let jobId = await contract.methods.jobCount().call();
     await contract.methods.postJob(title, desc).send({ from: accounts[0] });
 
-    // let response = await contract.methods.getJob(jobPostings.length).call();
-    // let posting = [response['poster'], response['title'], response['description']];
     let posting = [jobId, accounts[0], title, desc];
     let postings = jobPostings;
     postings.push(posting);
@@ -70,12 +62,6 @@ class App extends Component {
   runExample = async () => {
     const { jobPostings, accounts, contract } = this.state;
 
-    // Stores a given value, 5 by default.
-    // await contract.methods.set(5).send({ from: accounts[0] });
-
-    // // Get the value from the contract to prove it worked.
-    // const response = await contract.methods.get().call();
-
     var title = "Solidity Developer";
     var desc = "Write solidity, write tests, etc....";
     await contract.methods.postJob(title, desc).send({ from: accounts[0] });
@@ -84,7 +70,6 @@ class App extends Component {
     let postings = jobPostings;
     postings.push(posting);
 
-    // Update state with the result.
     this.setState({ jobPostings: postings });
   };
 
@@ -114,10 +99,7 @@ class App extends Component {
             <input type="submit" value="Post job" />
         </form>
         <br/>
-        {/* <JobPost key="0" web3={this.state.web3} accounts={this.state.accounts} contract={this.state.contract} 
-            jobId="0" poster="0x00000000000000000000000000000000000000000" title="Test Job title" description="Test job description..." /> */}
         {jobPosts}
-        {/* <div>The stored value is: {this.state.storageValue}</div> */}
       </div>
     );
   }
