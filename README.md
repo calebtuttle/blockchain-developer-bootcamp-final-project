@@ -27,7 +27,7 @@ Tests are run on the local truffle develop testnet at port 8545. Use truffle to 
     test
 
 ## Accessing the Frontend
-where the frontend project can be accessed (see #8).
+The frontend is live at: [https://trusting-noyce-341963.netlify.app/](https://trusting-noyce-341963.netlify.app/)
 
 ## My Ethereum Address (for the certificate NFT)
 0xcaFe2eF59688187EE312C8aca10CEB798338f7e3
