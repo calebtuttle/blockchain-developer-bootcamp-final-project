@@ -15084,6 +15084,12 @@
     "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0x079769045cAe17719bc4eC132d5b6165e8E8bdc3",
+      "transactionHash": "0xf6fc15f8e060a431505e383025e512a886cdcdc38a2d163f05461a5ffde50ff6"
+    },
     "5777": {
       "events": {
         "0x59470163a7d3423114f115af31707633dd4930abac0f3662fc3c4ef323f39a86": {
@@ -15200,7 +15206,7 @@
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-11-25T18:11:45.805Z",
+  "updatedAt": "2021-11-26T15:55:45.562Z",
   "networkType": "ethereum",
   "devdoc": {
     "author": "Caleb Tuttle",
